@@ -1,25 +1,12 @@
-from enum import Enum
-
-class HTMLType(Enum):
-    TEXT = "text"
-    PARAGRAPH = "p"
-    ANCHOR = "a"
-
-    @classmethod
-    def heading(cls, level: int) -> str:
-        if not isinstance(level, int) or level < 1 or level > 6:
-            raise ValueError("Heading level must be an integer between 1 and 6")
-        return f"h{level}"
-
 class HTMLNode():
-    def __init__(self, tag: HTMLType | None = None,
-                 value: str | None = None,
+    def __init__(self, tag=None,
+                 value=None,
                  children=None,
-                 props: dict | None = None):
+                 props=None):
         
         self.tag = tag
         self.value = value
-        if not isinstance(children, list) or not all(isinstance(x, HTMLNode) for x in children):
+        if not isinstance(children, list):
             if not children == None:
                 raise TypeError(f"children must be list of HTMLNode, got {type(children)}")
         self.children = children
@@ -52,4 +39,26 @@ class LeafNode(HTMLNode):
 
         props = self.props_to_html()
 
-        return f"<{self.tag.value}{props if props else ""}>{self.value}</{self.tag.value}>"
+        if self.tag is not None:
+            return f"<{self.tag}{props if props else ""}>{self.value}</{self.tag}>"
+        return f"{self.value}"
+
+class ParentNode(HTMLNode):
+    def __init__(self, tag,
+                 children,
+                 props: dict | None = None):
+            self.tag = tag
+            self.value = None
+            self.children = children
+            self.props = props
+
+    def to_html(self):
+        if not self.children:
+            raise ValueError("parent nodes are required to have a child element")
+        if not self.tag:
+            raise ValueError("parent nodes are required to have a tag")
+        props = self.props_to_html()
+        result = ""
+        for child in self.children:
+            result += child.to_html()
+        return f"<{self.tag}{props if props else ""}>{result}</{self.tag}>"
