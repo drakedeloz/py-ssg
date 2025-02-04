@@ -11,7 +11,7 @@ class TestSplitNodesDelimiter(unittest.TestCase):
     def test_split_nodes_delimiter_multiple(self):
         node = TextNode("This **bold** and **more bold**", TextType.TEXT)
         nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
-        assert len(nodes) == 5
+        assert len(nodes) == 4
         # What assertions would verify the correct splitting?
 
     def test_split_nodes_delimiter_no_delimiter(self):
