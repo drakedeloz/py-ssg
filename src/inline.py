@@ -13,10 +13,11 @@ def text_to_textnodes(text):
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     results = []
     for node in old_nodes:
-        if node.text_type != TextType.TEXT:
-            results.append(node)
-            continue
         split_nodes = []
+        if node.text_type != TextType.TEXT:
+            split_nodes.append(node)
+            results.extend(split_nodes)
+            continue
         split_text = node.text.split(delimiter)
         if len(split_text) % 2 == 0:
             raise Exception("Invalid markdown")
@@ -42,7 +43,7 @@ def split_nodes_image(old_nodes):
         split_nodes = []
         images = extract_markdown_images(text)
         if not images:
-            split_nodes.append(TextNode(text, TextType.TEXT))
+            split_nodes.append(node)
         else:
             remaining_text = text
             for image in images:
@@ -72,7 +73,7 @@ def split_nodes_links(old_nodes):
         split_nodes = []
         links = extract_markdown_links(text)
         if not links:
-            split_nodes.append(TextNode(text, TextType.TEXT))
+            split_nodes.append(node)
         else:
             remaining_text = text
             for link in links:

@@ -149,7 +149,6 @@ class TestTextToNodes(unittest.TestCase):
     def test_text_to_nodes(self):
         text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
         nodes = text_to_textnodes(text)
-        print(nodes)
         assert nodes == [
             TextNode("This is ", TextType.TEXT),
             TextNode("text", TextType.BOLD),
