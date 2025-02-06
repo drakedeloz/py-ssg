@@ -41,3 +41,14 @@ class TestBlocks(unittest.TestCase):
             "This is another block"
         ]
         assert result == expected
+
+class TestBlockToBlockType(unittest.TestCase):
+    def test_block_to_block_type(self):
+        # Test for a heading
+        assert block_to_block_type("# Heading") == "heading"
+
+        # Test for code block
+        assert block_to_block_type("```\ncode\n```") == "code"
+
+        # Test for quote block
+        assert block_to_block_type("> A line in a quote") == "quote"
