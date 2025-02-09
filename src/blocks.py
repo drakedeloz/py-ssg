@@ -40,3 +40,35 @@ def block_to_block_type(markdown_block):
         if all(split[i].startswith(f"{i}. ") for i in range(len(split))):
             return "ordered_list"
     return "paragraph"
+
+def text_to_children(text):
+    match text:
+        case "heading":
+            # do something
+        case "code":
+            # do something
+        case "quote":
+            #do something
+        case "unordered_list":
+            #do something
+        case "ordered_list":
+            #do something
+        case "paragraph":
+            #do something
+        case _:
+            raise Exception("invalid block type")
+
+def markdown_to_html_node(markdown):
+    blocks = markdown_to_blocks(markdown)
+
+    block_types = {
+        "heading": False,
+        "code": False,
+        "quote": True,
+        "unordered_list": True,
+        "ordered_list": True,
+        "paragraph": False
+    }
+
+    for block in blocks:
+        block_type = block_to_block_type(block)
